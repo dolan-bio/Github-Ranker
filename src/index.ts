@@ -5,6 +5,7 @@ import { StatusRouter } from "./api/status";
 
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { DevelopmentConfig, ProductionConfig } from "./config";
+import { ContributionsScraper } from "./contributions-scraper/index";
 
 const config = process.env.NODE_ENV === undefined || process.env.NODE_ENV === "dev" ? DevelopmentConfig : ProductionConfig;
 
@@ -19,3 +20,6 @@ appWrapper.configure((app) => {
 });
 
 appWrapper.start();
+
+const scraper = new ContributionsScraper();
+scraper.fetch();
