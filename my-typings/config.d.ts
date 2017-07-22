@@ -1,5 +1,5 @@
 interface IConfig {
-    port: number;
+    port: string | number;
     mongoUri: string;
     github: {
         token: string,
