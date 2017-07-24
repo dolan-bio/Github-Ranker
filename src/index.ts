@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+// import * as mongoose from "mongoose";
 import * as logger from "winston";
 
 import { StatusRouter } from "./api/status";
@@ -6,11 +6,12 @@ import { StatusRouter } from "./api/status";
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { DevelopmentConfig, ProductionConfig } from "./config";
 import { ContributionsScraper } from "./contributions-scraper/index";
+import { UserFetcher } from "./user-fetcher/index";
 
 const config = process.env.NODE_ENV === undefined || process.env.NODE_ENV === "dev" ? DevelopmentConfig : ProductionConfig;
 
-(mongoose as PromiseMongoose).Promise = global.Promise;
-mongoose.connect(config.mongoUri);
+// (mongoose as PromiseMongoose).Promise = global.Promise;
+// mongoose.connect(config.mongoUri);
 
 const appWrapper = new ApplicationWrapper(config);
 
@@ -22,4 +23,7 @@ appWrapper.configure((app) => {
 appWrapper.start();
 
 const scraper = new ContributionsScraper();
-scraper.fetch();
+scraper.fetch("dolanmiu");
+
+const fetcher = new UserFetcher();
+fetcher.fetch(100);
