@@ -12,6 +12,11 @@ export class ContributionsFetcher {
         return getAsObservable({
             url: url,
         }).map(([error, response, body]) => {
+            // Sometimes may throw 404 error
+            if (response.statusCode === 404) {
+                return 0;
+            }
+
             if (error || response.statusCode !== 200) {
                 throw new Error(error);
             }
@@ -30,7 +35,7 @@ export class ContributionsFetcher {
             });
 
             return total;
-        }).retry(10);
+        }).retry(2);
 
     }
 }
