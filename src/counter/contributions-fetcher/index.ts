@@ -2,19 +2,18 @@ import * as cheerio from "cheerio";
 import * as request from "request";
 import { Observable } from "rxjs/Rx";
 
-export class ContributionsScraper {
+export class ContributionsFetcher {
 
-    public fetch(username: string): void {
+    public fetch(username: string): Observable<number> {
         const url = `https://github.com/users/${username}/contributions`;
 
-        const getAsObservable = Observable.bindCallback<[Error, request.RequestResponse, string]>(request.get);
-        const contributionCount$ = getAsObservable({
+        // tslint:disable-next-line:no-any
+        const getAsObservable = Observable.bindCallback<[any, request.RequestResponse, string]>(request.get);
+        return getAsObservable({
             url: url,
         }).map(([error, response, body]) => {
             if (error || response.statusCode !== 200) {
-                console.error(error);
-                console.error(body);
-                return;
+                throw new Error(error);
             }
 
             const $ = cheerio.load(body);
@@ -26,11 +25,12 @@ export class ContributionsScraper {
                 contributions.push(parseInt(count, 10));
             });
 
-            console.log(contributions.reduce((a, b) => {
+            const total = contributions.reduce((a, b) => {
                 return a + b;
-            }));
-        });
+            });
 
-        contributionCount$.subscribe();
+            return total;
+        }).retry(10);
+
     }
 }

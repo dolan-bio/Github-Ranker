@@ -5,8 +5,7 @@ import { StatusRouter } from "./api/status";
 
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { DevelopmentConfig, ProductionConfig } from "./config";
-import { ContributionsScraper } from "./contributions-scraper/index";
-import { UserFetcher } from "./user-fetcher/index";
+import { Counter } from "./counter";
 
 const config = process.env.NODE_ENV === undefined || process.env.NODE_ENV === "dev" ? DevelopmentConfig : ProductionConfig;
 
@@ -22,8 +21,5 @@ appWrapper.configure((app) => {
 
 appWrapper.start();
 
-const scraper = new ContributionsScraper();
-scraper.fetch("dolanmiu");
-
-const fetcher = new UserFetcher();
-fetcher.fetch(100);
+const counter = new Counter();
+counter.count();
