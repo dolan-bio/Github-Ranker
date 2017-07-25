@@ -9,17 +9,19 @@ interface ISnapshotDocument extends mongoose.Document {
     average: number;
 }
 
-const SnapshotSchema = new mongoose.Schema({
-    user: {
-        from: Number,
-        to: Number,
+const SnapshotSchema = new mongoose.Schema(
+    {
+        user: {
+            from: Number,
+            to: Number,
+            count: Number,
+        },
+        average: Number,
     },
-    average: Number,
-});
-
-SnapshotSchema.virtual("user.count")
-    .get(function(): number {
-        return Math.abs(this.user.to - this.user.from);
+    {
+        timestamps: {
+            createdAt: "created_at",
+        },
     });
 
 const Snapshot = mongoose.model<ISnapshotDocument>("GithubRankerSnapshot", SnapshotSchema);
