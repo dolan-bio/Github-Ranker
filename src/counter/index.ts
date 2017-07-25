@@ -1,6 +1,8 @@
+import * as _ from "lodash";
 import { Observable } from "rxjs/Rx";
 
 import { ContributionsFetcher } from "./contributions-fetcher";
+import { ISnapshotDocument, Snapshot } from "./snapshot-model";
 import { UserFetcher } from "./user-fetcher";
 
 interface IUserContributionData {
@@ -19,11 +21,26 @@ export class Counter {
     }
 
     public count(): void {
-        const userId = 0; // retreieve from db;
+        const s$ = Observable.fromPromise<ISnapshotDocument>(Snapshot.findOne().sort("-created_at").sort("-created_at"));
 
-        this.getCombinedContributionData(userId).bufferCount(50).subscribe((data) => {
-            console.log(data);
-            // console.log(data.length);
+        s$.flatMap((snapshot) => {
+            const userId = snapshot ? snapshot.user.to : 0;
+
+            return this.getCombinedContributionData(userId).take(200).toArray().map((data) => {
+                return data.sort((a, b) => {
+                    return a.id > b.id ? 1 : -1;
+                });
+            });
+        }).subscribe((data) => {
+            const snapshot = new Snapshot({
+                user: {
+                    from: data[0].id,
+                    to: data[data.length - 1].id,
+                    count: data.length,
+                },
+                average: _.meanBy(data, (o) => o.contributions),
+            });
+            snapshot.save();
         });
     }
 
