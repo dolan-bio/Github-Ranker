@@ -41,6 +41,7 @@ export class Counter {
                 average: _.meanBy(data, (o) => o.contributions),
             });
             snapshot.save();
+            process.exit();
         });
     }
 
