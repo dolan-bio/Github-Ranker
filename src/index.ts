@@ -1,4 +1,4 @@
-// import * as mongoose from "mongoose";
+import * as mongoose from "mongoose";
 import * as logger from "winston";
 
 import { StatusRouter } from "./api/status";
@@ -9,8 +9,8 @@ import { Counter } from "./counter";
 
 const config = process.env.NODE_ENV === undefined || process.env.NODE_ENV === "dev" ? DevelopmentConfig : ProductionConfig;
 
-// (mongoose as PromiseMongoose).Promise = global.Promise;
-// mongoose.connect(config.mongoUri);
+(mongoose as PromiseMongoose).Promise = global.Promise;
+mongoose.connect(config.mongoUri);
 
 const appWrapper = new ApplicationWrapper(config);
 
