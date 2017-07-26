@@ -4,4 +4,5 @@ interface IConfig {
     github: {
         token: string,
     };
+    amountPerRun: number;
 }

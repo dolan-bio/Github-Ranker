@@ -1,3 +1,0 @@
-interface ServerError {
-    message: string,
-}

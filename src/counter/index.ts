@@ -15,7 +15,7 @@ export class Counter {
     private userFetcher: UserFetcher;
     private contributionsFetcher: ContributionsFetcher;
 
-    constructor() {
+    constructor(private amountToTake: number) {
         this.userFetcher = new UserFetcher();
         this.contributionsFetcher = new ContributionsFetcher();
     }
@@ -26,7 +26,7 @@ export class Counter {
         s$.flatMap((snapshot) => {
             const userId = snapshot ? snapshot.user.to : 0;
 
-            return this.getCombinedContributionData(userId).take(200).toArray().map((data) => {
+            return this.getCombinedContributionData(userId).take(this.amountToTake).toArray().map((data) => {
                 return data.sort((a, b) => {
                     return a.id > b.id ? 1 : -1;
                 });
