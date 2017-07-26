@@ -37,11 +37,11 @@
     "mongoose": "^4.8.1",
     "request": "^2.79.0",
     "rxjs": "^5.4.1",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "rimraf": "^2.5.4",
+    "typescript": "2.3.4"
   },
   "devDependencies": {
-    "rimraf": "^2.5.4",
-    "tslint": "^5.4.3",
-    "typescript": "2.3.4"
+    "tslint": "^5.4.3"
   }
 }
