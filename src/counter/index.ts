@@ -40,8 +40,10 @@ export class Counter {
                 },
                 average: _.meanBy(data, (o) => o.contributions),
             });
-            snapshot.save();
-            process.exit();
+            console.log(snapshot);
+            snapshot.save().then(() => {
+                process.exit();
+            });
         });
     }
 

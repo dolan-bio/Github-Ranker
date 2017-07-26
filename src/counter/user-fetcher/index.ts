@@ -20,7 +20,7 @@ export class UserFetcher {
         this.currentStartId = userId;
 
         return Observable.timer(0, 10000).flatMap(() => {
-            console.log("running");
+            console.log("Ticking in timer");
             console.log(this.currentStartId);
             return this.getUsers(this.currentStartId);
         });
