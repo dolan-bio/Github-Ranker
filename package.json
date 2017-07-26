@@ -7,7 +7,7 @@
     "pretest": "tsc --p .",
     "test": "npm run lint",
     "prestart": "rimraf dist && tsc --p .",
-    "start": "node ./dist/index.js",
+    "count": "npm run prestart && node ./dist/count.js",
     "lint": "tslint --project .",
     "mocha": "mocha ./dist/**/*.spec.js"
   },
