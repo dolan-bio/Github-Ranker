@@ -6,7 +6,12 @@ interface ISnapshotDocument extends mongoose.Document {
         to: number,
         count: number,
     };
-    average: number;
+    c: number;
+    d: number;
+    contributions: {
+        average: number,
+        highest: number,
+    };
 }
 
 const SnapshotSchema = new mongoose.Schema(
@@ -16,7 +21,12 @@ const SnapshotSchema = new mongoose.Schema(
             to: Number,
             count: Number,
         },
-        average: Number,
+        c: Number,
+        d: Number,
+        contributions: {
+            average: Number,
+            highest: Number,
+        },
     },
     {
         timestamps: {

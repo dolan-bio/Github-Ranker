@@ -31,15 +31,51 @@ export class Counter {
                     return a.id > b.id ? 1 : -1;
                 });
             });
-        }).subscribe((data) => {
+        }).map((data) => {
+            const map = new Map<number, number>();
+
+            data.forEach((o) => {
+                const key = Math.ceil(o.contributions / 100) * 100;
+
+                if (map.has(key)) {
+                    const currentCount = map.get(key);
+                    map.set(key, currentCount + 1);
+                } else {
+                    map.set(key, 1);
+                }
+            });
+
+            return { map, data };
+        }).map((res) => {
+            const c = this.calculateC(res.map);
+            const dList: number[] = [];
+
+            res.map.forEach((value, key) => {
+                dList.push(this.calculateD(key, value, c));
+            });
+
+            return {
+                map: res.map,
+                data: res.data,
+                c: c,
+                dList: dList.filter((d) => !isNaN(d)),
+            };
+        }).subscribe((res) => {
+            // c and d are constants to model the y = e^(-dx) graph
             const snapshot = new Snapshot({
                 user: {
-                    from: data[0].id,
-                    to: data[data.length - 1].id,
-                    count: data.length,
+                    from: res.data[0].id,
+                    to: res.data[res.data.length - 1].id,
+                    count: res.data.length,
                 },
-                average: _.meanBy(data, (o) => o.contributions),
+                c: res.c,
+                d: _.mean(res.dList),
+                contributions: {
+                    average: _.meanBy(res.data, (o) => o.contributions),
+                    highest: _.maxBy(res.data, (o) => o.contributions),
+                },
             });
+            console.log(snapshot);
             snapshot.save();
             process.exit();
         });
@@ -56,5 +92,21 @@ export class Counter {
                     };
                 });
             });
+    }
+
+    private calculateC(map: Map<number, number>): number {
+        const c = map.get(0);
+
+        if (!c) {
+            throw new Error("Dataset doesn't have 0 value");
+        }
+
+        return c;
+    }
+
+    private calculateD(contributions: number, frequency: number, c: number): number {
+        const d = -(1 / contributions) * Math.log(c / frequency);
+
+        return d;
     }
 }
