@@ -62,6 +62,7 @@ export class Counter {
             };
         }).subscribe((res) => {
             // c and d are constants to model the y = e^(-dx) graph
+            const highestUser = _.maxBy(res.data, (o) => o.contributions);
             const snapshot = new Snapshot({
                 user: {
                     from: res.data[0].id,
@@ -72,10 +73,11 @@ export class Counter {
                 d: _.mean(res.dList),
                 contributions: {
                     average: _.meanBy(res.data, (o) => o.contributions),
-                    highest: _.maxBy(res.data, (o) => o.contributions).contributions,
+                    highest: highestUser.contributions,
                 },
             });
             console.log(snapshot);
+            console.log(highestUser);
             snapshot.save().then(() => {
                 process.exit();
             });
