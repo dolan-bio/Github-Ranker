@@ -76,8 +76,9 @@ export class Counter {
                 },
             });
             console.log(snapshot);
-            snapshot.save();
-            process.exit();
+            snapshot.save().then(() => {
+                process.exit();
+            });
         });
     }
 
