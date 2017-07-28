@@ -72,7 +72,7 @@ export class Counter {
                 d: _.mean(res.dList),
                 contributions: {
                     average: _.meanBy(res.data, (o) => o.contributions),
-                    highest: _.maxBy(res.data, (o) => o.contributions),
+                    highest: _.maxBy(res.data, (o) => o.contributions).contributions,
                 },
             });
             console.log(snapshot);
