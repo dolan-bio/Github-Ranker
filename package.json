@@ -8,6 +8,7 @@
     "test": "npm run lint",
     "prestart": "rimraf dist && tsc --p .",
     "count": "npm run prestart && node ./dist/count.js",
+    "sum": "npm run prestart && node ./dist/sum.js",
     "lint": "tslint --project .",
     "mocha": "mocha ./dist/**/*.spec.js"
   },
