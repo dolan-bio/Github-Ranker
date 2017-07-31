@@ -35,7 +35,7 @@ export class UserFetcher {
         }).map(([err, response, body]) => {
             this.currentStartId = body[body.length - 1].id;
             return body;
-        }).flatMap((user) => {
+        }).retry(5).flatMap((user) => {
             return user;
         }).map((user) => {
             return _.pick(user, ["login", "id"]);
