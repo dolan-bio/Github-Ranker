@@ -17,7 +17,7 @@ export class Summer {
 
             return {
                 totalDocuments: snapshots.length,
-                c: _.mean(cList),
+                c: _.sum(cList),
                 d: _.mean(dList),
                 contributions: {
                     average: _.mean(averageList),
