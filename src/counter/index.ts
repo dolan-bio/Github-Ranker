@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { WriteOpResult } from "mongodb";
+// import { WriteOpResult } from "mongodb";
 import { Observable } from "rxjs/Rx";
 
 import { ContributionsFetcher } from "./contributions-fetcher";
