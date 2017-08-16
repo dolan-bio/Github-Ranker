@@ -33,8 +33,15 @@ export class UserFetcher {
             json: true,
             headers: { "user-agent": "node.js" },
         }).map(([err, response, body]) => {
-            this.currentStartId = body[body.length - 1].id;
             return body;
+        }).do((body) => {
+            const endId = body[body.length - 1].id;
+            const isReachedEnd = endId === startUserId;
+            // Reset back to 1 if reached end of Github database
+            if (isReachedEnd) {
+                console.warn("WARNING: Reached end of database. If this doesn't seem right, then something went wrong.");
+            }
+            this.currentStartId = isReachedEnd ? endId : 1;
         }).retry(5).flatMap((user) => {
             return user;
         }).map((user) => {

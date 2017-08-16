@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import { WriteOpResult } from "mongodb";
 import { Observable } from "rxjs/Rx";
 
 import { ContributionsFetcher } from "./contributions-fetcher";
@@ -21,7 +22,7 @@ export class Counter {
     }
 
     public count(): void {
-        const s$ = Observable.fromPromise<ISnapshotDocument>(Snapshot.findOne().sort("-created_at").sort("-created_at"));
+        const s$ = Observable.fromPromise<ISnapshotDocument>(Snapshot.findOne().sort("-created_at"));
 
         s$.flatMap((snapshot) => {
             const userId = snapshot ? snapshot.user.to : 0;
@@ -78,9 +79,13 @@ export class Counter {
             });
             console.log(snapshot);
             console.log(highestUser);
-            snapshot.save().then(() => {
-                process.exit();
-            });
+
+            Observable.forkJoin(
+                Observable.fromPromise(snapshot.save()),
+                Observable.fromPromise<WriteOpResult>(Snapshot.findOne().sort("created_at").remove()),
+                () => {
+                    process.exit();
+                }).subscribe();
         });
     }
 
