@@ -40,7 +40,7 @@ export class UserFetcher {
             if (isReachedEnd) {
                 console.warn("WARNING: Reached end of database. If this doesn't seem right, then something went wrong.");
             }
-            this.currentStartId = isReachedEnd ? endId : 1;
+            this.currentStartId = !isReachedEnd ? endId : 1;
         }).retry(5).flatMap((user) => {
             return user;
         }).map((user) => {
