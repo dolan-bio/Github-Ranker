@@ -80,12 +80,15 @@ export class Counter {
             console.log(snapshot);
             console.log(highestUser);
 
-            Observable.forkJoin(
-                Observable.fromPromise(snapshot.save()),
-                Observable.fromPromise<WriteOpResult>(Snapshot.findOne().sort("created_at").remove()),
-                () => {
-                    process.exit();
-                }).subscribe();
+            Observable.fromPromise(snapshot.save()).subscribe(() => {
+                process.exit();
+            });
+
+            // Observable.forkJoin(
+            //     Observable.fromPromise(snapshot.save()),
+            //     Observable.fromPromise<WriteOpResult>(Snapshot.findOne({}, null, { limit: 1 }).sort("created_at").remove()), () => null).subscribe(() => {
+            //         process.exit();
+            //     });
         });
     }
 
